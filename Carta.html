@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketing - Monky Café</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fceae8;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 8px;
+    }
+    h1, h2, h3, h4 {
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    p, li {
+      line-height: 1.6;
+    }
+    ul {
+      margin-left: 20px;
+    }
+    a {
+      display: inline-block;
+      margin-top: 15px;
+      margin-right: 10px;
+      padding: 8px 12px;
+      background-color: #f28c8c;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    a:hover {
+      background-color: #e06363;
+    }
+    img {
+      display: block;
+      margin: 15px auto;
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Carta</h1>
+    <p>
+      Crear y organizar un menú atractivo y fácil de entender que ayude a los clientes a elegir productos y aumente las ventas, disponible en formato físico y digital.
+    </p>
+
+    <h2>Usuarios del modulo</h2>
+    <ul>
+      <li>Cliente</li>
+      <li>Propietario</li>
+    </ul>
+
+    <h2>Requerimientos por usuario</h2>
+    <h3>Requerimientos del Cliente</h3>
+    <ul>
+  <li><strong>Consultar la carta:</strong> Puede ver la lista de productos disponibles.</li>
+  <li><strong>Ver detalles de productos:</strong> Puede consultar nombre, descripción, precio y categoría de cada producto.</li>
+  <li><strong>Consultar disponibilidad:</strong> Solo ve los productos que están activos o disponibles para pedir.</li>
+</ul>
+
+    <h3>Requerimientos del Propietario</h3>
+    <ul>
+  <li><strong>Crear productos nuevos:</strong> Debe poder agregar un producto a la carta, indicando nombre, descripción, categoría, precio y fecha de agregado.</li>
+  <li><strong>Actualizar productos existentes:</strong> Puede modificar cualquier campo del producto: nombre, descripción, categoría, precio o disponibilidad.</li>
+  <li><strong>Eliminar productos obsoletos:</strong> Puede eliminar productos que ya no se ofrecen en la cafetería.</li>
+  <li><strong>Controlar disponibilidad:</strong> Activar o desactivar productos según existencias o promociones.</li>
+  <li><strong>Consultar la carta completa:</strong> Puede ver todos los productos registrados, incluyendo los desactivados o eliminados temporalmente.</li>
+</ul>
+
+<h2>Diseño de la base de datos del módulo</h2>
+<img src="TablaCarta.png" alt="Tabla Carta">
+
+<h2>Descripción de Pertinencia de la Arquitectura de la Base de Datos</h2>
+<h3>Tabla Carta</h3>
+<h4>Propósito</h4>
+<p>El módulo Carta gestiona los productos y menús de la cafetería, permitiendo registrar artículos, controlar precios y disponibilidad, relacionar con inventario y promociones, y facilitar la consulta y actualización del menú por el personal.
+</p>
+
+<h4>Campos</h4>
+<ul>
+  <li><strong>Id_producto:</strong> Identificador único del producto (clave primaria, autoincrementable).</li>
+  <li><strong>Nombre:</strong> Nombre del producto (ej. Café Latte, Pastel de Chocolate).</li>
+  <li><strong>Descripcion:</strong> Descripción del producto (ingredientes, tamaño, etc.).</li>
+  <li><strong>Precio:</strong> Precio del producto.</li>
+  <li><strong>Categoria:</strong> Tipo de producto (Bebida, Postre, Combo, Otros).</li>
+  <li><strong>Disponible:</strong> Estado de disponibilidad (Sí / No).</li>
+  <li><strong>Fecha_agregado:</strong> Fecha en la que se agregó el producto a la carta.</li>
+</ul>
+
+<h2>Normalización de la Base de Datos</h2>
+<ul>
+  <li><strong>1FN:</strong> Cada campo almacena un valor único → Cumplido.</li>
+  <li><strong>2FN:</strong> Todos los campos dependen de la clave primaria Id_producto → Cumplido.</li>
+  <li><strong>3FN:</strong> Ningún campo depende de otro que no sea la clave primaria → Cumplido.</li>
+</ul>
+
+<h3>Código SQL para crear la tabla</h3>
+<pre>CREATE TABLE Carta (
+    Id_producto INT PRIMARY KEY IDENTITY(1,1),
+    Nombre NVARCHAR(100) NOT NULL,
+    Descripcion NVARCHAR(200) NULL,
+    Precio DECIMAL(10,2) NOT NULL,
+    Categoria NVARCHAR(50) NULL,
+    Disponible BIT NOT NULL DEFAULT 1,
+    Fecha_agregado DATE NOT NULL
+);
+GO
+CREATE TABLE Inventario (
+    Id_inventario INT PRIMARY KEY IDENTITY(1,1),
+    Id_producto INT NOT NULL,
+    Ingrediente NVARCHAR(100) NOT NULL,
+    Cantidad DECIMAL(10,2) NOT NULL,
+    Unidad NVARCHAR(20) NOT NULL,
+    Fecha_actualizacion DATE NOT NULL,
+    FOREIGN KEY (Id_producto) REFERENCES Carta(Id_producto)
+);
+GO
+</pre>
+
+<h3>Código SQL para agregar registros</h3>
+<pre>INSERT INTO Carta (Nombre, Descripcion, Precio, Categoria, Disponible, Fecha_agregado)
+VALUES
+('Café Mocha', 'Café con chocolate y leche', 38.00, 'Bebida', 1, '2025-01-11'),
+('Flat White', 'Café con leche y crema fina', 36.00, 'Bebida', 1, '2025-01-12'),
+('Café Macchiato', 'Café espresso con un poco de espuma', 33.00, 'Bebida', 1, '2025-01-13'),
+('Té Negro', 'Té negro natural', 20.00, 'Bebida', 1, '2025-01-14'),
+('Té de Limón', 'Infusión de té con limón', 18.00, 'Bebida', 1, '2025-01-14'),
+('Frappé de Chocolate', 'Café frío con chocolate y leche', 40.00, 'Bebida', 1, '2025-01-15'),
+('Smoothie Plátano', 'Smoothie de plátano con leche', 35.00, 'Bebida', 1, '2025-01-15'),
+('Smoothie Mango y Fresa', 'Mezcla de mango y fresa con leche', 36.00, 'Bebida', 1, '2025-01-16'),
+('Lemonade', 'Limonada natural con hielo', 25.00, 'Bebida', 1, '2025-01-16'),
+('Agua Mineral', 'Agua mineral natural', 15.00, 'Bebida', 1, '2025-01-16'),
+('Cheesecake de Fresa', 'Cheesecake con cubierta de fresa', 55.00, 'Postre', 1, '2025-01-17'),
+('Tarta de Limón', 'Tarta de limón con merengue', 50.00, 'Postre', 1, '2025-01-17'),
+('Brownie con Helado', 'Brownie de chocolate con helado', 60.00, 'Postre', 1, '2025-01-18'),
+('Galletas de Chocolate', 'Galletas caseras con chispas de chocolate', 22.00, 'Postre', 1, '2025-01-18'),
+('Muffin Vainilla', 'Muffin de vainilla con chips', 20.00, 'Postre', 1, '2025-01-19'),
+('Pan de Chocolate', 'Pan dulce con chocolate', 18.00, 'Postre', 1, '2025-01-19'),
+('Combo Espresso + Brownie', 'Espresso + Brownie de chocolate', 45.00, 'Combo', 1, '2025-01-20'),
+('Combo Latte + Cheesecake', 'Café Latte + Cheesecake de Fresa', 90.00, 'Combo', 1, '2025-01-21'),
+('Combo Smoothie + Muffin', 'Smoothie de Mango + Muffin Vainilla', 55.00, 'Combo', 1, '2025-01-21'),
+('Desayuno Café + Pan', 'Café + Pan de Chocolate', 40.00, 'Combo', 1, '2025-01-22'),
+('Chocolate Frío', 'Chocolate frío con hielo y crema', 38.00, 'Bebida', 1, '2025-01-23'),
+('Infusión Manzanilla', 'Té de manzanilla natural', 18.00, 'Bebida', 1, '2025-01-23'),
+('Té Chai Latte', 'Té chai con leche', 30.00, 'Bebida', 1, '2025-01-24'),
+('Café Frappé', 'Café frío con hielo y leche', 38.00, 'Bebida', 1, '2025-01-25'),
+('Cheesecake Chocolate', 'Cheesecake con chocolate', 55.00, 'Postre', 1, '2025-01-26'),
+('Muffin Chocolate', 'Muffin de chocolate con chips', 22.00, 'Postre', 1, '2025-01-27'),
+('Pan Integral', 'Pan casero integral', 15.00, 'Postre', 1, '2025-01-28'),
+('Galletas de Avena y Pasas', 'Galletas de avena con pasas', 20.00, 'Postre', 1, '2025-01-29'),
+('Smoothie Frutos Rojos', 'Smoothie de frutos rojos con leche', 37.00, 'Bebida', 1, '2025-01-30'),
+('Combo Frappé + Brownie', 'Frappé de Chocolate + Brownie', 70.00, 'Combo', 1, '2025-01-31');
+GO
+</pre>
+
+    <a href="index.html">⬅ Volver al menú principal</a>
+    <a href="FormularioCarta.html">Formulario</a>
+
+    <h3>Responsable del modulo</h3>
+    <p>Galilea Alonso Hernandez (230110012@itsoeh.edu.mx)</p>
+
+  </div>
+</body>
+</html>

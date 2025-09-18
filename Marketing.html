@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketing - Monky Café</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fceae8;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 8px;
+    }
+    h1, h2, h3, h4 {
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    p, li {
+      line-height: 1.6;
+    }
+    ul {
+      margin-left: 20px;
+    }
+    a {
+      display: inline-block;
+      margin-top: 15px;
+      margin-right: 10px;
+      padding: 8px 12px;
+      background-color: #f28c8c;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    a:hover {
+      background-color: #e06363;
+    }
+    img {
+      display: block;
+      margin: 15px auto;
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Marketing</h1>
+    <p>
+      Implementa estrategias para dar a conocer la cafetería, atraer más clientes y destacar la marca usando campañas, redes sociales y promociones en medios físicos y digitales.
+    </p>
+
+    <h2>Usuarios del modulo</h2>
+    <ul>
+      <li>Propietario</li>
+    </ul>
+
+    <h2>Requerimientos por usuario</h2>
+    <h3>Requerimientos del propietario</h3>
+    <ul>
+      <li><strong>Crear Promociones:</strong> Definir nuevas campañas de marketing.</li>
+      <li><strong>Acceder a Campañas Existentes:</strong> Consultar información sobre promociones activas.</li>
+      <li><strong>Modificar Detalles de Campañas:</strong> Actualizar nombres, objetivos y medios de promoción.</li>
+      <li><strong>Gestionar Fechas:</strong> Establecer y modificar fechas de inicio y fin de las promociones.</li>
+      <li><strong>Eliminar Campañas Vencidas:</strong> Retirar promociones que ya no están en vigencia.</li>
+    </ul>
+
+    <h2>Diseño de la base de datos del módulo</h2>
+    <img src="TablaMarketing.png" alt="Tabla Marketing">
+
+    <h2>Descripción de Pertinencia de la Arquitectura de la Base de Datos</h2>
+    <h3>Tabla Marketing</h3>
+    <h4>Propósito</h4>
+    <p>
+      La tabla Marketing tiene como objetivo gestionar las campañas de marketing de la cafetería. Permite crear, consultar, actualizar y eliminar campañas para medir su impacto en clientes y ventas.
+    </p>
+
+    <h4>Campos</h4>
+    <ul>
+      <li><strong>Id_marketing:</strong> Identificador único de la campaña (clave primaria, autoincrementable).</li>
+      <li><strong>Nombre:</strong> Nombre de la campaña (ejemplo: Promo 2x1 Café).</li>
+      <li><strong>Objetivo:</strong> Propósito de la campaña (ejemplo: Aumentar clientes nuevos).</li>
+      <li><strong>Medio:</strong> Canal de difusión (ejemplo: Facebook, radio, volanteo, etc.).</li>
+      <li><strong>Fecha_inicio:</strong> Fecha en que inicia la campaña.</li>
+      <li><strong>Fecha_fin:</strong> Fecha en que finaliza la campaña (puede estar vacía si sigue activa).</li>
+    </ul>
+
+    <h2>Normalización de la Base de Datos</h2>
+    <ul>
+      <li><strong>1FN:</strong> Cada campo almacena un único valor; la tabla Marketing cumple.</li>
+      <li><strong>2FN:</strong> Todos los campos dependen de la clave primaria (Id_marketing).</li>
+      <li><strong>3FN:</strong> Ningún campo depende de otro campo que no sea la clave primaria.</li>
+    </ul>
+
+    <h3>Código SQL para crear la tabla</h3>
+    <pre>
+-- Crear la base de datos
+CREATE DATABASE MonkyCafeDB;
+GO
+
+-- Usar la base de datos
+USE MonkyCafeDB;
+GO
+
+-- Crear tabla Marketing
+CREATE TABLE Marketing (
+    Id_marketing INT PRIMARY KEY IDENTITY(1,1),
+    Nombre NVARCHAR(100) NOT NULL,
+    Objetivo NVARCHAR(200),
+    Medio NVARCHAR(100),
+    Fecha_inicio DATE NOT NULL,
+    Fecha_fin DATE
+);
+GO
+    </pre>
+
+    <h3>Código SQL para agregar registros</h3>
+    <pre>
+INSERT INTO Marketing (Nombre, Objetivo, Medio, Fecha_inicio, Fecha_fin)
+VALUES 
+('Promo 2x1 en Cafés', 'Aumentar clientes en la mañana', 'Redes Sociales', '2025-09-01', '2025-09-30'),
+('Descuento Estudiantes', 'Fidelizar estudiantes universitarios', 'Volanteo', '2025-09-10', '2025-10-10'),
+('Café gratis con pastel', 'Incrementar ventas de repostería', 'Facebook Ads', '2025-09-15', NULL),
+('Promo Fin de Semana', 'Aumentar flujo de clientes sábados y domingos', 'Instagram', '2025-09-20', '2025-10-20'),
+('Campaña Radio Local', 'Dar a conocer la cafetería en la zona', 'Radio', '2025-08-01', '2025-09-01'),
+('Feria Universitaria', 'Promocionar productos a estudiantes en evento', 'Evento presencial', '2025-09-25', '2025-09-27'),
+('Happy Hour', 'Incentivar consumo entre 5pm y 7pm', 'Carteles físicos', '2025-09-05', '2025-12-31'),
+('Promo Café Orgánico', 'Promover café orgánico de proveedores locales', 'Blog y Facebook', '2025-10-01', '2025-10-31'),
+('Campaña Otoño', 'Resaltar bebidas de temporada (pumpkin latte)', 'Instagram & TikTok', '2025-10-15', '2025-11-15'),
+('Descuento Membresías', 'Aumentar número de socios con membresía', 'Correo electrónico', '2025-09-12', '2025-10-12'),
+('Invita a un Amigo', 'Expandir clientela a través de referidos', 'WhatsApp', '2025-09-18', NULL),
+('Campaña San Valentín', 'Promocionar combos de pareja', 'Instagram', '2025-02-01', '2025-02-15'),
+('Promo Navidad', 'Impulsar ventas de postres navideños', 'Facebook Ads', '2025-12-01', '2025-12-31'),
+('Día del Café', 'Celebrar el día internacional del café con descuentos', 'Redes Sociales', '2025-10-01', '2025-10-01'),
+('Cliente Frecuente', 'Premiar lealtad con cupones', 'Correo y App', '2025-09-01', NULL),
+('Publicidad Cine Local', 'Dar visibilidad en comerciales de cine', 'Pantallas cine', '2025-09-10', '2025-11-10'),
+('Regalo por Compra', 'Incentivar consumo con artículos promocionales', 'Instagram', '2025-09-22', '2025-10-22'),
+('Campaña Saludable', 'Promover opciones sin azúcar y veganas', 'TikTok', '2025-10-05', '2025-11-05'),
+('Combo Familiar', 'Atraer familias con descuentos por volumen', 'Volanteo', '2025-09-15', '2025-12-15'),
+('Semana del Estudiante', 'Ofrecer descuentos exclusivos a universitarios', 'Redes Sociales', '2025-09-20', '2025-09-27');
+GO
+    </pre>
+
+    <a href="index.html">⬅ Volver al menú principal</a>
+    <a href="FormularioMarketing.html">Formulario</a>
+
+    <h3>Responsable del modulo</h3>
+    <p>Galilea Alonso Hernandez (230110012@itsoeh.edu.mx)</p>
+
+  </div>
+</body>
+</html>

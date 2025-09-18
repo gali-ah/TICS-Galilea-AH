@@ -1,391 +1,87 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Módulos de Cafetería</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Gestión de Inventario (SGI) - Monky Café</title>
   <style>
-    :root{
-      --bg:#0f172a;          /* slate-900 */
-      --card:#0b1229;        /* deep navy */
-      --muted:#1e293b;       /* slate-800 */
-      --text:#e5e7eb;        /* gray-200 */
-      --subtext:#94a3b8;     /* slate-400 */
-      --brand:#f59e0b;       /* amber-500 */
-      --ok:#22c55e;          /* green-500 */
-      --warn:#eab308;        /* yellow-500 */
-      --info:#38bdf8;        /* sky-400 */
-      --danger:#ef4444;      /* red-500 */
-      --border:#23304d;
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fceae8; /* Fondo rosa claro */
+      color: #000;
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
-      background: radial-gradient(1200px 600px at 10% -10%, rgba(245,158,11,.08), transparent),
-                  radial-gradient(900px 500px at 110% 10%, rgba(56,189,248,.08), transparent),
-                  var(--bg);
-      color:var(--text);
-      line-height:1.6;
+    .container {
+      width: 90%;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
     }
-    header{
-      padding:48px 20px 20px;
-      text-align:center;
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 10px;
     }
-    .title{
-      font-size:clamp(28px, 4vw, 44px);
-      margin:0 0 10px;
-      letter-spacing:.5px;
+    h2 {
+      font-size: 1.8em;
+      margin-top: 25px;
+      margin-bottom: 10px;
     }
-    .subtitle{
-      margin:0;
-      color:var(--subtext);
-      font-size:clamp(14px, 2vw, 18px);
+    p {
+      text-align: justify;
+      font-size: 1em;
+      line-height: 1.6;
     }
-    .container{
-      max-width:1100px;
-      margin:24px auto 80px;
-      padding:0 20px;
-      display:grid;
-      gap:20px;
-    }
-    .grid{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:20px;
-    }
-    @media (min-width: 900px){
-      .grid{ grid-template-columns:1fr 1fr; }
-    }
-    .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.04);
-    }
-    .card h2{
-      margin:0 0 6px;
-      font-size:22px;
-      letter-spacing:.3px;
-    }
-    .badge{
-      display:inline-block;
-      padding:4px 10px;
-      border-radius:999px;
-      font-size:12px;
-      letter-spacing:.3px;
-      border:1px solid var(--border);
-      background:rgba(245,158,11,.08);
-      color:var(--brand);
-    }
-    .objective{ color:var(--text); margin:6px 0 14px; }
-    .muted{ color:var(--subtext); }
-
-    table{ width:100%; border-collapse:separate; border-spacing:0; margin-top:10px; overflow:hidden; border-radius:14px; border:1px solid var(--border); }
-    thead th{
-      text-align:left; font-weight:600; font-size:14px; padding:12px 14px; background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); color:var(--text); border-bottom:1px solid var(--border);
-    }
-    tbody td{
-      padding:12px 14px; font-size:14px; color:var(--text); border-bottom:1px solid var(--border);
-    }
-    tbody tr:nth-child(odd){ background:rgba(255,255,255,.02); }
-    tbody tr:hover{ background:rgba(56,189,248,.07); }
-
-    .crud{ display:inline-flex; gap:6px; flex-wrap:wrap; }
-    .pill{ padding:4px 8px; border-radius:999px; font-size:12px; border:1px solid var(--border); background:rgba(255,255,255,.04); }
-    .pill.ok{ color:var(--ok); }
-    .pill.info{ color:var(--info); }
-    .pill.warn{ color:var(--warn); }
-    .pill.danger{ color:var(--danger); }
-
-    .legend{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:8px; }
-    .section-title{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
-    .section-title small{ color:var(--subtext); font-weight:500; }
-
-    footer{ text-align:center; color:var(--subtext); padding:30px 16px; }
-    .rel{ margin-top:10px; }
   </style>
 </head>
 <body>
-  <header>
-    <h1 class="title">Módulos de cafetería</h1>
-    <p class="subtitle">Estructura simple para una cafetería local: Marketing y Carta</p>
-  </header>
+  <div class="container">
+    <h1>Sistema de Gestión de Inventario (SGI)</h1>
+    <p>
+      El <strong>Sistema de Gestión de Inventario (SGI)</strong> es un sistema propuesto para optimizar la administración de la cafetería Monky Café,
+      diseñado para controlar de manera eficiente las áreas clave del negocio: Análisis de ventas, marketing, personal, ingredientes, proveedores, inventario, facturación, carta, seguridad, membresía, ventas.
 
-  <main class="container">
+    </p>
 
-    <!-- MARKETING -->
-    <section class="card">
-      <div class="section-title">
-        <h2>Marketing</h2>
-        <span class="badge">Módulo</span>
-      </div>
-      <p class="objective"><strong>Objetivo:</strong> Implementar estrategias para dar a conocer la cafetería, atraer más clientes y destacar la marca usando campañas, redes sociales y promociones en medios físicos y digitales.</p>
+    <h2>Problemática del proyecto</h2>
+    <p>
+      Actualmente, la cafetería Monky Café enfrenta dificultades en el control de su inventario debido a que el registro de productos,
+      ingredientes, ventas y compras se realiza de manera manual. Esta situación provoca errores en el manejo de existencias,
+      falta de control sobre los ingredientes mínimos necesarios, demoras en la reposición de insumos y riesgos de pérdidas económicas.
+      Ante esta problemática, surge la necesidad de desarrollar un sistema que optimice la gestión del inventario,
+      permitiendo un control más preciso, ágil y confiable de las operaciones diarias.
+    </p>
 
-      <h3 class="muted">Tabla • Acciones por atributo (CRUD)</h3>
-      <div class="legend">
-        <span class="pill ok">Crear</span>
-        <span class="pill info">Leer</span>
-        <span class="pill warn">Actualizar</span>
-        <span class="pill danger">Eliminar</span>
-      </div>
-      <table aria-label="Acciones CRUD - Marketing">
-        <thead>
-          <tr>
-            <th>Atributo</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Id_marketing</td>
-            <td>
-              <span class="crud">
-                <span class="pill ok">Crear</span>
-                <span class="pill info">Leer</span>
-              </span>
-            </td>
-          </tr>
-          <tr>
-            <td>Nombre</td>
-            <td class="crud">
-              <span class="pill ok">Crear</span>
-              <span class="pill info">Leer</span>
-              <span class="pill warn">Actualizar</span>
-            </td>
-          </tr>
-          <tr>
-            <td>Objetivo</td>
-            <td class="crud">
-              <span class="pill ok">Crear</span>
-              <span class="pill info">Leer</span>
-              <span class="pill warn">Actualizar</span>
-            </td>
-          </tr>
-          <tr>
-            <td>Medio</td>
-            <td class="crud">
-              <span class="pill ok">Crear</span>
-              <span class="pill info">Leer</span>
-              <span class="pill warn">Actualizar</span>
-            </td>
-          </tr>
-          <tr>
-            <td>Fecha_inicio</td>
-            <td class="crud">
-              <span class="pill ok">Crear</span>
-              <span class="pill info">Leer</span>
-              <span class="pill warn">Actualizar</span>
-            </td>
-          </tr>
-          <tr>
-            <td>Fecha_fin</td>
-            <td class="crud">
-              <span class="pill ok">Crear</span>
-              <span class="pill info">Leer</span>
-              <span class="pill warn">Actualizar</span>
-              <span class="pill danger">Eliminar (cuando pase)</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <h2>Objetivo del proyecto</h2>
+    <p>
+      Desarrollar un sistema de gestión de inventario para la cafetería Monky Café que permita optimizar el control de productos,
+      ingredientes, ventas y compras, mediante el uso de una aplicación de software programada en C#,
+      conectada a una base de datos en SQL Server e implementada en una arquitectura cliente-servidor.
+    </p>
 
-      <h3 class="muted" style="margin-top:16px">Atributos • Para qué sirve</h3>
-      <table aria-label="Atributos Marketing">
-        <thead>
-          <tr>
-            <th>Atributo</th>
-            <th>Para qué sirve</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>id_marketing</td>
-            <td>Identifica cada promoción o campaña con un número único para evitar confusión.</td>
-          </tr>
-          <tr>
-            <td>nombre</td>
-            <td>Ponerle un nombre sencillo y reconocible a la promoción (ej. “2x1 en café”).</td>
-          </tr>
-          <tr>
-            <td>objetivo</td>
-            <td>Explicar qué se busca lograr con esa promoción (ej. vender más en la tarde).</td>
-          </tr>
-          <tr>
-            <td>medio</td>
-            <td>Indicar dónde se anunciará (ej. cartel, redes sociales, volante).</td>
-          </tr>
-          <tr>
-            <td>fecha_inicio</td>
-            <td>Saber el día exacto en que empieza la promoción.</td>
-          </tr>
-          <tr>
-            <td>fecha_fin</td>
-            <td>Saber cuándo termina y así no tener promociones fuera de fecha.</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+    <h2>Subsistemas del proyecto</h2>
+    <p>
+      En Monky Café, estos subsistemas permitirán gestionar de manera ordenada el análisis de ventas, marketing, personal, ingredientes, proveedores, inventario, facturación, carta, seguridad y membresía, garantizando que cada área funcione de forma eficiente sin perder la visión global del sistema.
+    </p>
+    <img src="Modulos.jpg"  width="450">
 
-    <!-- CARTA -->
-    <section class="card">
-      <div class="section-title">
-        <h2>Carta</h2>
-        <span class="badge">Módulo</span>
-      </div>
-      <p class="objective"><strong>Objetivo:</strong> Crear y organizar un menú atractivo y fácil de entender que ayude a los clientes a elegir productos y aumente las ventas, disponible en formato físico y digital.</p>
+    <nav>
+  <ul>
+    <li><a href="#analisis-ventas">Análisis de ventas</a></li>
+    <li><a href="Marketing.html">Marketing</a></li>
+    <li><a href="#personal">Personal</a></li>
+    <li><a href="#ingredientes">Ingredientes</a></li>
+    <li><a href="#proveedores">Proveedores</a></li>
+    <li><a href="#inventario">Inventario</a></li>
+    <li><a href="#facturacion">Facturación</a></li>
+    <li><a href="Carta.html">Carta</a></li>
+    <li><a href="#seguridad">Seguridad</a></li>
+    <li><a href="#membresia">Membresía</a></li>
+    <li><a href="#ventas">Ventas</a></li>
+  </ul>
+</nav>
 
-      <h3 class="muted">Tabla • Acciones por atributo (CRUD)</h3>
-      <div class="legend">
-        <span class="pill ok">Crear</span>
-        <span class="pill info">Leer</span>
-        <span class="pill warn">Actualizar</span>
-        <span class="pill danger">Eliminar</span>
-      </div>
-      <table aria-label="Acciones CRUD - Carta">
-        <thead>
-          <tr>
-            <th>Atributo</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Id_producto</td>
-            <td class="crud">
-              <span class="pill ok">Crear</span>
-              <span class="pill info">Leer</span>
-            </td>
-          </tr>
-          <tr>
-            <td>Nombre</td>
-            <td class="crud">
-              <span class="pill ok">Crear</span>
-              <span class="pill info">Leer</span>
-              <span class="pill warn">Actualizar</span>
-            </td>
-          </tr>
-          <tr>
-            <td>Tipo</td>
-            <td class="crud">
-              <span class="pill ok">Crear</span>
-              <span class="pill info">Leer</span>
-              <span class="pill warn">Actualizar</span>
-            </td>
-          </tr>
-          <tr>
-            <td>Precio</td>
-            <td class="crud">
-              <span class="pill ok">Crear</span>
-              <span class="pill info">Leer</span>
-              <span class="pill warn">Actualizar</span>
-            </td>
-          </tr>
-          <tr>
-            <td>Disponible</td>
-            <td class="crud">
-              <span class="pill ok">Crear</span>
-              <span class="pill info">Leer</span>
-              <span class="pill warn">Actualizar</span>
-            </td>
-          </tr>
-          <tr>
-            <td>Promoción</td>
-            <td class="crud">
-              <span class="pill ok">Crear</span>
-              <span class="pill info">Leer</span>
-              <span class="pill warn">Actualizar</span>
-              <span class="pill danger">Eliminar (si ya no aplica)</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
 
-      <h3 class="muted" style="margin-top:16px">Atributos • Para qué sirve</h3>
-      <table aria-label="Atributos Carta">
-        <thead>
-          <tr>
-            <th>Atributo</th>
-            <th>Para qué sirve</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>id_producto</td>
-            <td>Identificar cada producto (bebida, comida, postre) con un número único para tener orden.</td>
-          </tr>
-          <tr>
-            <td>nombre</td>
-            <td>Mostrar el nombre del producto en el menú para el cliente.</td>
-          </tr>
-          <tr>
-            <td>tipo</td>
-            <td>Clasificar el producto (bebida, comida, postre).</td>
-          </tr>
-          <tr>
-            <td>precio</td>
-            <td>Indicar el costo del producto para control interno y mostrar al cliente.</td>
-          </tr>
-          <tr>
-            <td>disponible</td>
-            <td>Señalar si el producto está disponible o no (por ejemplo, si falta algún ingrediente).</td>
-          </tr>
-          <tr>
-            <td>promoción</td>
-            <td>Indicar si el producto tiene alguna oferta especial o descuento.</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- RELACIONES -->
-    <section class="card">
-      <div class="section-title">
-        <h2>Relación entre Marketing y Carta</h2>
-        <small>Cómo se conectan los módulos</small>
-      </div>
-      <table class="rel" aria-label="Relaciones Marketing-Carta">
-        <thead>
-          <tr>
-            <th>Atributo en Marketing</th>
-            <th>Atributo en Carta</th>
-            <th>Tipo de Relación</th>
-            <th>Explicación</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>nombre</td>
-            <td>promoción</td>
-            <td>Relación directa</td>
-            <td>Una promoción creada en Marketing se asocia a un producto específico de la carta (ej. “2x1 en Latte”).</td>
-          </tr>
-          <tr>
-            <td>objetivo</td>
-            <td>tipo</td>
-            <td>Relación estratégica</td>
-            <td>Los objetivos de las campañas ayudan a decidir qué tipo de productos promocionar (bebidas, postres, etc.).</td>
-          </tr>
-          <tr>
-            <td>medio</td>
-            <td>nombre</td>
-            <td>Relación informativa</td>
-            <td>Indica cómo y dónde se promocionará el producto seleccionado de la carta.</td>
-          </tr>
-          <tr>
-            <td>fecha_inicio / fecha_fin</td>
-            <td>disponible</td>
-            <td>Relación temporal</td>
-            <td>La promoción solo aplica si el producto está disponible y dentro de las fechas indicadas.</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-  </main>
-
-  <footer>
-    Hecho con 💛 para una cafetería local.
-  </footer>
+  </div>
 </body>
 </html>
