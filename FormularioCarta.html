@@ -5,49 +5,128 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Formulario de Carta - Monky Café</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #fceae8;
-      margin: 0;
-      padding: 20px;
-    }
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px 15px;
-      background-color: #f28c8c;
-      border: none;
-      color: #fff;
-      font-size: 16px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #e06363;
-    }
+    /* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Fondo general */
+body {
+  background-color: #fde2e4; /* rosa pastel */
+  color: #333;
+  line-height: 1.6;
+  padding: 20px;
+}
+
+/* Contenedor principal */
+.container {
+  max-width: 1000px;
+  margin: 30px auto;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* Titulos */
+h1 {
+  font-size: 2.5em;
+  color: #ff4d6d; /* rosa fuerte */
+  margin-bottom: 20px;
+  text-align: center;
+}
+h2 {
+  font-size: 2em;
+  color: #ff6f91;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+h3, h4 {
+  color: #ff6f91;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+/* Párrafos y listas */
+p, li {
+  font-size: 1em;
+  margin-bottom: 10px;
+}
+ul {
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+
+/* Enlaces */
+a {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #ff4d6d;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  margin-right: 10px;
+  transition: 0.3s;
+}
+a:hover {
+  background-color: #ff1f4b;
+}
+
+/* Imágenes */
+img {
+  display: block;
+  margin: 20px auto;
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+/* Formularios */
+form label {
+  display: block;
+  font-weight: bold;
+  margin-top: 15px;
+}
+form input, form select, form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+form button, form input[type="submit"] {
+  margin-top: 20px;
+  padding: 12px 20px;
+  background-color: #ff4d6d;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+form button:hover, form input[type="submit"]:hover {
+  background-color: #ff1f4b;
+}
+
+/* Navegación */
+nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+nav ul li {
+  list-style: none;
+}
+nav ul li a {
+  padding: 8px 12px;
+  font-weight: bold;
+}
+
   </style>
 </head>
 <body>

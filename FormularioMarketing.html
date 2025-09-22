@@ -1,19 +1,91 @@
-<form action="AgregarMarketing.aspx" method="post">
-  <label for="nombre">Nombre de la campaña:</label>
-  <input type="text" id="nombre" name="nombre" required><br><br>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario Marketing - Monky Café</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fde2e4; /* rosa pastel */
+      padding: 20px;
+      color: #333;
+    }
 
-  <label for="objetivo">Objetivo:</label>
-  <input type="text" id="objetivo" name="objetivo"><br><br>
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
 
-  <label for="medio">Medio:</label>
-  <input type="text" id="medio" name="medio"><br><br>
+    h2 {
+      text-align: center;
+      color: #ff4d6d; /* rosa fuerte */
+      margin-bottom: 25px;
+    }
 
-  <label for="fecha_inicio">Fecha inicio:</label>
-  <input type="date" id="fecha_inicio" name="fecha_inicio" required><br><br>
+    label {
+      display: block;
+      font-weight: bold;
+      margin-top: 15px;
+    }
 
-  <label for="fecha_fin">Fecha fin:</label>
-  <input type="date" id="fecha_fin" name="fecha_fin"><br><br>
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
 
-  <input type="submit" value="Agregar Campaña">
-  <a href="Marketing.html">Marketing</a>
-</form>
+    input[type="submit"], button, a {
+      margin-top: 20px;
+      padding: 12px 20px;
+      background-color: #ff4d6d;
+      color: #fff;
+      text-decoration: none;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      display: inline-block;
+      transition: 0.3s;
+    }
+
+    input[type="submit"]:hover, a:hover {
+      background-color: #ff1f4b;
+    }
+
+    a {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Agregar Campaña de Marketing</h2>
+    <form action="AgregarMarketing.aspx" method="post">
+      <label for="nombre">Nombre de la campaña:</label>
+      <input type="text" id="nombre" name="nombre" required>
+
+      <label for="objetivo">Objetivo:</label>
+      <input type="text" id="objetivo" name="objetivo">
+
+      <label for="medio">Medio:</label>
+      <input type="text" id="medio" name="medio">
+
+      <label for="fecha_inicio">Fecha inicio:</label>
+      <input type="date" id="fecha_inicio" name="fecha_inicio" required>
+
+      <label for="fecha_fin">Fecha fin:</label>
+      <input type="date" id="fecha_fin" name="fecha_fin">
+
+      <input type="submit" value="Agregar Campaña">
+      <a href="Marketing.html">Volver a Marketing</a>
+    </form>
+  </div>
+</body>
+</html>
