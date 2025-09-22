@@ -79,7 +79,7 @@
 </ul>
 
 <h2>Diseño de la base de datos del módulo</h2>
-<img src="TablaCarta.png" alt="Tabla Carta">
+<img src="TablaCarta2.png" alt="Tabla Carta">
 
 <h2>Descripción de Pertinencia de la Arquitectura de la Base de Datos</h2>
 <h3>Tabla Carta</h3>
@@ -98,12 +98,101 @@
   <li><strong>Fecha_agregado:</strong> Fecha en la que se agregó el producto a la carta.</li>
 </ul>
 
+<h3>Tabla Ingredientes</h3>
+<h4>Propósito</h4>
+<p>Guardar las materias primas y su stock actual.
+</p>
+<h4>Campos</h4>
+<ul>
+    <li><strong>Id_ingrediente</strong>: Identificador único (PK).</li>
+    <li><strong>Nombre</strong>: Nombre del ingrediente (ej. Leche, Pan, Café).</li>
+    <li><strong>Cantidad</strong>:  Existencia actual.</li>
+    <li><strong>Unidad</strong>: Medida (litros, kilos, piezas).</li>
+    <li><strong>Fecha_actualizacion</strong>: Última vez que se actualizó el stock.</li>
+</ul>
+
+<h3>Tabla Receta</h3>
+<h4>Propósito</h4>
+<p>Conectar un producto de la carta con los ingredientes que requiere.
+</p>
+<h4>Campos</h4>
+<ul>
+    <li><strong>Id_receta</strong>: Identificador único (PK).</li>
+    <li><strong>Id_producto</strong>: Producto asociado (FK → Carta).</li>
+    <li><strong>Id_ingrediente</strong>: Ingrediente asociado (FK → Ingredientes).</li>
+    <li><strong>Cantidad</strong>: Cantidad de ingrediente necesaria por unidad de producto.</li>
+    <li><strong>Es_opcional</strong>: Si puede omitirse (ej. jitomate en hamburguesa).</li>
+</ul>
+
+
+<h3>Tabla Inventario</h3>
+<h4>Propósito</h4>
+<p>Controlar el stock actual de cada ingrediente
+</p>
+<h4>Campos</h4>
+<ul>
+    <li><strong>Id_inventario</strong>: Identificador único (PK).</li>
+    <li><strong>Id_ingrediente</strong>: Ingrediente relacionado (FK → Ingredientes).</li>
+    <li><strong>Cantidad</strong>: Stock disponible.</li>
+    <li><strong>Fecha_actualizacion</strong>: Fecha de último cambio.</li>
+</ul>
+
+<h3>Tabla Ventas</h3>
+<h4>Propósito</h4>
+<p>Registrar las operaciones de venta.
+</p>
+<h4>Campos</h4>
+<ul>
+    <li><strong>Id_venta</strong>: Identificador único (PK).</li>
+    <li><strong>Id_producto</strong>: Producto vendido (FK → Carta).</li>
+    <li><strong>Cantidad</strong>: Número de unidades.</li>
+    <li><strong>Total</strong>: Importe de la venta.</li>
+    <li><strong>Fecha_venta</strong>: Fecha y hora de la venta.</li>
+</ul>
+
+<h3>Tabla MovimientosInentario</h3>
+<h4>Propósito</h4>
+<p>Llevar el historial de entradas y salidas de ingredientes.
+</p>
+<h4>Campos</h4>
+<ul>
+    <li><strong>Id_movimiento</strong>: Identificador único (PK).</li>
+    <li><strong>Id_ingrediente</strong>: Ingrediente relacionado (FK → Ingredientes).</li>
+    <li><strong>Tipo</strong>: Entrada (compra) o Salida (venta/merma).</li>
+    <li><strong>Cantidad</strong>: Cantidad del movimiento.</li>
+    <li><strong>Fecha</strong>: Fecha y hora del movimiento.</li>
+    <li><strong>Referencia</strong>: Descripción del motivo (ej. “Venta #12”).</li>
+</ul>
+
+
 <h2>Normalización de la Base de Datos</h2>
 <ul>
-  <li><strong>1FN:</strong> Cada campo almacena un valor único → Cumplido.</li>
-  <li><strong>2FN:</strong> Todos los campos dependen de la clave primaria Id_producto → Cumplido.</li>
-  <li><strong>3FN:</strong> Ningún campo depende de otro que no sea la clave primaria → Cumplido.</li>
+    <li><strong>Primera Forma Normal (1FN)</strong>
+        <ul>
+            <li>Cada campo almacena un solo valor (nada de listas o datos repetidos en una celda).</li>
+            <li>Ejemplo: En Ingredientes cada fila es un ingrediente único con su cantidad.</li>
+            <li>✔ Cumplida.</li>
+        </ul>
+    </li>
+    <li><strong>Segunda Forma Normal (2FN)</strong>
+        <ul>
+            <li>Cada campo depende de la clave primaria de su tabla.</li>
+            <li>Ejemplo: En Receta, el campo Cantidad depende de la combinación Id_producto + Id_ingrediente.</li>
+            <li>✔ Cumplida.</li>
+        </ul>
+    </li>
+    <li><strong>Tercera Forma Normal (3FN)</strong>
+        <ul>
+            <li>Ningún campo depende de otro campo que no sea la clave primaria.</li>
+            <li>Ejemplo: En Carta, el precio depende del producto, no de la categoría.</li>
+            <li>✔ Cumplida.</li>
+        </ul>
+    </li>
 </ul>
+
+
+
+
 
 <h3>Código SQL para crear la tabla</h3>
 <pre>CREATE TABLE Carta (
@@ -116,14 +205,58 @@
     Fecha_agregado DATE NOT NULL
 );
 GO
+
+-- Ingredientes (catálogo de insumos, sin stock)
+CREATE TABLE Ingredientes (
+    Id_ingrediente INT PRIMARY KEY IDENTITY(1,1),
+    Nombre NVARCHAR(100) NOT NULL,
+    Unidad NVARCHAR(20) NOT NULL,
+    Fecha_agregado DATE NOT NULL
+);
+GO
+
+-- Inventario (stock real por ingrediente)
 CREATE TABLE Inventario (
     Id_inventario INT PRIMARY KEY IDENTITY(1,1),
-    Id_producto INT NOT NULL,
-    Ingrediente NVARCHAR(100) NOT NULL,
-    Cantidad DECIMAL(10,2) NOT NULL,
-    Unidad NVARCHAR(20) NOT NULL,
+    Id_ingrediente INT NOT NULL,
+    Cantidad DECIMAL(10,2) NOT NULL,          -- Stock actual
     Fecha_actualizacion DATE NOT NULL,
+    FOREIGN KEY (Id_ingrediente) REFERENCES Ingredientes(Id_ingrediente)
+);
+GO
+
+-- Receta (producto ↔ ingrediente, cantidad por unidad, opcionalidad)
+CREATE TABLE Receta (
+    Id_receta INT PRIMARY KEY IDENTITY(1,1),
+    Id_producto INT NOT NULL,
+    Id_ingrediente INT NOT NULL,
+    Cantidad DECIMAL(10,4) NOT NULL, -- cantidad por unidad de producto
+    Es_opcional BIT NOT NULL DEFAULT 0,
+    FOREIGN KEY (Id_producto) REFERENCES Carta(Id_producto),
+    FOREIGN KEY (Id_ingrediente) REFERENCES Ingredientes(Id_ingrediente)
+);
+GO
+
+-- Ventas (registro de ventas)
+CREATE TABLE Ventas (
+    Id_venta INT PRIMARY KEY IDENTITY(1,1),
+    Id_producto INT NOT NULL,
+    Cantidad INT NOT NULL,
+    Total DECIMAL(10,2) NOT NULL,
+    Fecha_venta DATETIME NOT NULL DEFAULT GETDATE(),
     FOREIGN KEY (Id_producto) REFERENCES Carta(Id_producto)
+);
+GO
+
+-- MovimientosInventario (historial de entradas/salidas por registro de inventario)
+CREATE TABLE MovimientosInventario (
+    Id_movimiento INT PRIMARY KEY IDENTITY(1,1),
+    Id_inventario INT NOT NULL,
+    Tipo NVARCHAR(10) CHECK (Tipo IN ('Entrada','Salida')),
+    Cantidad DECIMAL(10,4) NOT NULL,
+    Fecha DATETIME NOT NULL DEFAULT GETDATE(),
+    Referencia NVARCHAR(200) NULL,
+    FOREIGN KEY (Id_inventario) REFERENCES Inventario(Id_inventario)
 );
 GO
 </pre>
@@ -131,36 +264,83 @@ GO
 <h3>Código SQL para agregar registros</h3>
 <pre>INSERT INTO Carta (Nombre, Descripcion, Precio, Categoria, Disponible, Fecha_agregado)
 VALUES
-('Café Mocha', 'Café con chocolate y leche', 38.00, 'Bebida', 1, '2025-01-11'),
-('Flat White', 'Café con leche y crema fina', 36.00, 'Bebida', 1, '2025-01-12'),
-('Café Macchiato', 'Café espresso con un poco de espuma', 33.00, 'Bebida', 1, '2025-01-13'),
-('Té Negro', 'Té negro natural', 20.00, 'Bebida', 1, '2025-01-14'),
-('Té de Limón', 'Infusión de té con limón', 18.00, 'Bebida', 1, '2025-01-14'),
-('Frappé de Chocolate', 'Café frío con chocolate y leche', 40.00, 'Bebida', 1, '2025-01-15'),
-('Smoothie Plátano', 'Smoothie de plátano con leche', 35.00, 'Bebida', 1, '2025-01-15'),
-('Smoothie Mango y Fresa', 'Mezcla de mango y fresa con leche', 36.00, 'Bebida', 1, '2025-01-16'),
-('Lemonade', 'Limonada natural con hielo', 25.00, 'Bebida', 1, '2025-01-16'),
-('Agua Mineral', 'Agua mineral natural', 15.00, 'Bebida', 1, '2025-01-16'),
-('Cheesecake de Fresa', 'Cheesecake con cubierta de fresa', 55.00, 'Postre', 1, '2025-01-17'),
-('Tarta de Limón', 'Tarta de limón con merengue', 50.00, 'Postre', 1, '2025-01-17'),
-('Brownie con Helado', 'Brownie de chocolate con helado', 60.00, 'Postre', 1, '2025-01-18'),
-('Galletas de Chocolate', 'Galletas caseras con chispas de chocolate', 22.00, 'Postre', 1, '2025-01-18'),
-('Muffin Vainilla', 'Muffin de vainilla con chips', 20.00, 'Postre', 1, '2025-01-19'),
-('Pan de Chocolate', 'Pan dulce con chocolate', 18.00, 'Postre', 1, '2025-01-19'),
-('Combo Espresso + Brownie', 'Espresso + Brownie de chocolate', 45.00, 'Combo', 1, '2025-01-20'),
-('Combo Latte + Cheesecake', 'Café Latte + Cheesecake de Fresa', 90.00, 'Combo', 1, '2025-01-21'),
-('Combo Smoothie + Muffin', 'Smoothie de Mango + Muffin Vainilla', 55.00, 'Combo', 1, '2025-01-21'),
-('Desayuno Café + Pan', 'Café + Pan de Chocolate', 40.00, 'Combo', 1, '2025-01-22'),
-('Chocolate Frío', 'Chocolate frío con hielo y crema', 38.00, 'Bebida', 1, '2025-01-23'),
-('Infusión Manzanilla', 'Té de manzanilla natural', 18.00, 'Bebida', 1, '2025-01-23'),
-('Té Chai Latte', 'Té chai con leche', 30.00, 'Bebida', 1, '2025-01-24'),
-('Café Frappé', 'Café frío con hielo y leche', 38.00, 'Bebida', 1, '2025-01-25'),
-('Cheesecake Chocolate', 'Cheesecake con chocolate', 55.00, 'Postre', 1, '2025-01-26'),
-('Muffin Chocolate', 'Muffin de chocolate con chips', 22.00, 'Postre', 1, '2025-01-27'),
-('Pan Integral', 'Pan casero integral', 15.00, 'Postre', 1, '2025-01-28'),
-('Galletas de Avena y Pasas', 'Galletas de avena con pasas', 20.00, 'Postre', 1, '2025-01-29'),
-('Smoothie Frutos Rojos', 'Smoothie de frutos rojos con leche', 37.00, 'Bebida', 1, '2025-01-30'),
-('Combo Frappé + Brownie', 'Frappé de Chocolate + Brownie', 70.00, 'Combo', 1, '2025-01-31');
+('Café Latte', 'Café con leche espumosa', 45.00, 'Bebida', 1, GETDATE()),
+('Hamburguesa Clásica', 'Carne, queso, jitomate, lechuga y pan artesanal', 85.00, 'Comida', 1, GETDATE()),
+('Brownie', 'Pastel de chocolate con nuez', 40.00, 'Postre', 1, GETDATE());
+GO
+
+-- Ingredientes
+INSERT INTO Ingredientes (Nombre, Cantidad, Unidad, Fecha_actualizacion)
+VALUES
+('Café', 10.0, 'kg', GETDATE()),
+('Leche', 20.0, 'lt', GETDATE()),
+('Pan', 30.0, 'pz', GETDATE()),
+('Carne', 15.0, 'kg', GETDATE()),
+('Queso', 10.0, 'kg', GETDATE()),
+('Jitomate', 25.0, 'pz', GETDATE()),
+('Lechuga', 12.0, 'pz', GETDATE()),
+('Chocolate', 5.0, 'kg', GETDATE()),
+('Nuez', 2.0, 'kg', GETDATE());
+GO
+
+-- Receta
+INSERT INTO Receta (Id_producto, Id_ingrediente, Cantidad, Es_opcional)
+VALUES
+-- Café Latte
+(1, 1, 0.05, 0),  -- Café
+(1, 2, 0.20, 0),  -- Leche
+
+-- Hamburguesa Clásica
+(2, 3, 1.00, 0),  -- Pan
+(2, 4, 0.15, 0),  -- Carne
+(2, 5, 0.05, 0),  -- Queso
+(2, 6, 1.00, 1),  -- Jitomate (opcional)
+(2, 7, 1.00, 1),  -- Lechuga (opcional)
+
+-- Brownie
+(3, 8, 0.10, 0),  -- Chocolate
+(3, 9, 0.02, 0);  -- Nuez
+GO
+
+-- Inventario
+INSERT INTO Inventario (Id_ingrediente, Cantidad, Fecha_actualizacion)
+VALUES
+(1, 10.0, GETDATE()),  -- Café
+(2, 20.0, GETDATE()),  -- Leche
+(3, 30.0, GETDATE()),  -- Pan
+(4, 15.0, GETDATE()),  -- Carne
+(5, 10.0, GETDATE()),  -- Queso
+(6, 25.0, GETDATE()),  -- Jitomate
+(7, 12.0, GETDATE()),  -- Lechuga
+(8, 5.0, GETDATE()),   -- Chocolate
+(9, 2.0, GETDATE());   -- Nuez
+GO
+
+-- Ventas
+INSERT INTO Ventas (Id_producto, Cantidad, Total, Fecha_venta)
+VALUES
+(1, 2, 90.00, GETDATE()),   -- 2 Café Latte
+(2, 1, 85.00, GETDATE()),   -- 1 Hamburguesa Clásica
+(3, 3, 120.00, GETDATE());  -- 3 Brownies
+GO
+
+-- MovimientosInventario
+INSERT INTO MovimientosInventario (Id_ingrediente, Tipo, Cantidad, Fecha, Referencia)
+VALUES
+-- Por venta de 2 Café Latte
+(1, 'Salida', 0.10, GETDATE(), 'Venta Id=1'), -- Café
+(2, 'Salida', 0.40, GETDATE(), 'Venta Id=1'), -- Leche
+
+-- Por venta de 1 Hamburguesa
+(3, 'Salida', 1.00, GETDATE(), 'Venta Id=2'), -- Pan
+(4, 'Salida', 0.15, GETDATE(), 'Venta Id=2'), -- Carne
+(5, 'Salida', 0.05, GETDATE(), 'Venta Id=2'), -- Queso
+(6, 'Salida', 1.00, GETDATE(), 'Venta Id=2'), -- Jitomate
+(7, 'Salida', 1.00, GETDATE(), 'Venta Id=2'), -- Lechuga
+
+-- Por venta de 3 Brownies
+(8, 'Salida', 0.30, GETDATE(), 'Venta Id=3'), -- Chocolate
+(9, 'Salida', 0.06, GETDATE(), 'Venta Id=3'); -- Nuez
 GO
 </pre>
 
