@@ -2,90 +2,230 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulario Marketing - Monky Café</title>
+  <title>📊 Módulo Marketing</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #fde2e4; /* rosa pastel */
+      background: #ffe6f2;
+      margin: 0;
       padding: 20px;
       color: #333;
     }
-
-    .container {
-      max-width: 600px;
-      margin: 30px auto;
-      background-color: #fff;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
-
-    h2 {
+    h1 {
       text-align: center;
-      color: #ff4d6d; /* rosa fuerte */
-      margin-bottom: 25px;
+      color: #d63384;
     }
-
+    form, .filtros, table {
+      background: #fff0f6;
+      border: 2px solid #ff99cc;
+      border-radius: 12px;
+      padding: 15px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 700px;
+      box-shadow: 0 4px 8px rgba(255, 105, 180, 0.2);
+    }
     label {
       display: block;
+      margin-top: 10px;
       font-weight: bold;
-      margin-top: 15px;
+      color: #b30059;
     }
-
-    input, select {
+    input, select, textarea {
       width: 100%;
-      padding: 10px;
+      padding: 8px;
       margin-top: 5px;
+      border: 1px solid #ff80bf;
       border-radius: 8px;
-      border: 1px solid #ccc;
     }
-
-    input[type="submit"], button, a {
-      margin-top: 20px;
-      padding: 12px 20px;
-      background-color: #ff4d6d;
-      color: #fff;
-      text-decoration: none;
+    input[type="submit"], button {
+      background: #ff4da6;
+      color: white;
       border: none;
+      padding: 10px 20px;
+      margin-top: 15px;
       border-radius: 8px;
-      font-size: 16px;
       cursor: pointer;
-      display: inline-block;
-      transition: 0.3s;
+      font-size: 15px;
     }
-
-    input[type="submit"]:hover, a:hover {
-      background-color: #ff1f4b;
+    input[type="submit"]:hover, button:hover {
+      background: #e60073;
     }
-
-    a {
-      margin-left: 10px;
+    table {
+      border-collapse: collapse;
+      width: 90%;
+      margin: 20px auto;
+    }
+    th, td {
+      border: 1px solid #ffb3d9;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background: #ff99cc;
+      color: white;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Agregar Campaña de Marketing</h2>
-    <form action="AgregarMarketing.aspx" method="post">
-      <label for="nombre">Nombre de la campaña:</label>
-      <input type="text" id="nombre" name="nombre" required>
+  <h1>🌸 Módulo Marketing</h1>
 
-      <label for="objetivo">Objetivo:</label>
-      <input type="text" id="objetivo" name="objetivo">
+  <!-- Formulario Post -->
+  <form id="formPost">
+    <h2>📢 Registrar Post</h2>
+    <label>Plataforma</label>
+    <select id="plataforma" required>
+      <option value="Facebook">Facebook</option>
+      <option value="Instagram">Instagram</option>
+      <option value="TikTok">TikTok</option>
+    </select>
 
-      <label for="medio">Medio:</label>
-      <input type="text" id="medio" name="medio">
+    <label>Título</label>
+    <input type="text" id="titulo" required>
 
-      <label for="fecha_inicio">Fecha inicio:</label>
-      <input type="date" id="fecha_inicio" name="fecha_inicio" required>
+    <label>Contenido</label>
+    <textarea id="contenido"></textarea>
 
-      <label for="fecha_fin">Fecha fin:</label>
-      <input type="date" id="fecha_fin" name="fecha_fin">
+    <label>Fecha Publicación</label>
+    <input type="date" id="fecha" required>
 
-      <input type="submit" value="Agregar Campaña">
-      <a href="Marketing.html">Volver a Marketing</a>
-    </form>
+    <input type="submit" value="Registrar Post">
+  </form>
+
+  <!-- Formulario Estadísticas -->
+  <form id="formEstadisticas">
+    <h2>📈 Registrar Estadísticas</h2>
+    <label>ID del Post</label>
+    <input type="number" id="idPost" required>
+
+    <label>Likes</label>
+    <input type="number" id="likes" min="0">
+
+    <label>Vistas</label>
+    <input type="number" id="vistas" min="0">
+
+    <label>Compartidos</label>
+    <input type="number" id="compartidos" min="0">
+
+    <input type="submit" value="Registrar Estadísticas">
+  </form>
+
+  <!-- Filtros -->
+  <div class="filtros">
+    <h2>🔎 Filtros</h2>
+    <label>Plataforma</label>
+    <select id="filtroPlataforma">
+      <option value="Todas">Todas</option>
+      <option value="Facebook">Facebook</option>
+      <option value="Instagram">Instagram</option>
+      <option value="TikTok">TikTok</option>
+    </select>
+
+    <label>Fecha</label>
+    <input type="date" id="filtroFecha">
+
+    <button onclick="filtrar()">Aplicar Filtros</button>
   </div>
+
+  <!-- Tabla -->
+  <table id="tablaMarketing">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Plataforma</th>
+        <th>Título</th>
+        <th>Fecha</th>
+        <th>Likes</th>
+        <th>Vistas</th>
+        <th>Compartidos</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    let posts = [];
+    let estadisticas = [];
+    let idCounter = 1;
+
+    // Registrar post
+    document.getElementById("formPost").addEventListener("submit", e => {
+      e.preventDefault();
+      const plataforma = document.getElementById("plataforma").value;
+      const titulo = document.getElementById("titulo").value;
+      const contenido = document.getElementById("contenido").value;
+      const fecha = document.getElementById("fecha").value;
+
+      posts.push({ id: idCounter, plataforma, titulo, contenido, fecha });
+      estadisticas.push({ id: idCounter, likes: 0, vistas: 0, compartidos: 0 });
+      idCounter++;
+
+      mostrar();
+      e.target.reset();
+    });
+
+    // Registrar estadísticas
+    document.getElementById("formEstadisticas").addEventListener("submit", e => {
+      e.preventDefault();
+      const id = parseInt(document.getElementById("idPost").value);
+      const likes = parseInt(document.getElementById("likes").value) || 0;
+      const vistas = parseInt(document.getElementById("vistas").value) || 0;
+      const compartidos = parseInt(document.getElementById("compartidos").value) || 0;
+
+      const est = estadisticas.find(e => e.id === id);
+      if (est) {
+        est.likes += likes;
+        est.vistas += vistas;
+        est.compartidos += compartidos;
+      }
+      mostrar();
+      e.target.reset();
+    });
+
+    // Mostrar tabla
+    function mostrar() {
+      const tbody = document.querySelector("#tablaMarketing tbody");
+      tbody.innerHTML = "";
+      posts.forEach(p => {
+        const est = estadisticas.find(e => e.id === p.id);
+        tbody.innerHTML += `
+          <tr>
+            <td>${p.id}</td>
+            <td>${p.plataforma}</td>
+            <td>${p.titulo}</td>
+            <td>${p.fecha}</td>
+            <td>${est.likes}</td>
+            <td>${est.vistas}</td>
+            <td>${est.compartidos}</td>
+          </tr>`;
+      });
+    }
+
+    // Filtrar
+    function filtrar() {
+      const plataforma = document.getElementById("filtroPlataforma").value;
+      const fecha = document.getElementById("filtroFecha").value;
+      const tbody = document.querySelector("#tablaMarketing tbody");
+      tbody.innerHTML = "";
+
+      posts.forEach(p => {
+        const est = estadisticas.find(e => e.id === p.id);
+        if ((plataforma === "Todas" || p.plataforma === plataforma) &&
+            (!fecha || p.fecha === fecha)) {
+          tbody.innerHTML += `
+            <tr>
+              <td>${p.id}</td>
+              <td>${p.plataforma}</td>
+              <td>${p.titulo}</td>
+              <td>${p.fecha}</td>
+              <td>${est.likes}</td>
+              <td>${est.vistas}</td>
+              <td>${est.compartidos}</td>
+            </tr>`;
+        }
+      });
+    }
+    <a href="Marketing.html">Volver a Marketing</a>
+  </script>
 </body>
 </html>
