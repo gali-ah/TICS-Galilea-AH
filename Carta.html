@@ -145,284 +145,177 @@ nav ul li a {
     <h2>Requerimientos por usuario</h2>
     <h3>Requerimientos del Cliente</h3>
     <ul>
-  <li><strong>Consultar la carta:</strong> Puede ver la lista de productos disponibles.</li>
-  <li><strong>Ver detalles de productos:</strong> Puede consultar nombre, descripción, precio y categoría de cada producto.</li>
-  <li><strong>Consultar disponibilidad:</strong> Solo ve los productos que están activos o disponibles para pedir.</li>
+    <li>Consultar el menú completo de manera clara y organizada.</li>
+    <li>Visualizar los productos por categoría y subcategoría.</li>
+    <li>Identificar qué productos están disponibles o no.</li>
+    <li>Ver las promociones activas con precio original y precio con descuento.</li>
+    <li>Contar con información básica del producto: nombre, descripción, ingredientes principales, precio.</li>
 </ul>
 
     <h3>Requerimientos del Propietario</h3>
     <ul>
-  <li><strong>Crear productos nuevos:</strong> Debe poder agregar un producto a la carta, indicando nombre, descripción, categoría, precio y fecha de agregado.</li>
-  <li><strong>Actualizar productos existentes:</strong> Puede modificar cualquier campo del producto: nombre, descripción, categoría, precio o disponibilidad.</li>
-  <li><strong>Eliminar productos obsoletos:</strong> Puede eliminar productos que ya no se ofrecen en la cafetería.</li>
-  <li><strong>Controlar disponibilidad:</strong> Activar o desactivar productos según existencias o promociones.</li>
-  <li><strong>Consultar la carta completa:</strong> Puede ver todos los productos registrados, incluyendo los desactivados o eliminados temporalmente.</li>
+    <li>Poder registrar y actualizar categorías, subcategorías y productos.</li>
+    <li>Controlar la disponibilidad de los platillos (activar o desactivar según stock).</li>
+    <li>Gestionar fácilmente las promociones para destacar descuentos.</li>
+    <li>Mantener la base de datos en un formato normalizado que evite redundancias.</li>
 </ul>
 
 <h2>Diseño de la base de datos del módulo</h2>
-<img src="TablaCarta2.png" alt="Tabla Carta">
+<img src="TablaC.png" alt="Tabla Carta">
 
 <h2>Descripción de Pertinencia de la Arquitectura de la Base de Datos</h2>
-<h3>Tabla Carta</h3>
+<h3>Tabla Categorias</h3>
 <h4>Propósito</h4>
-<p>El módulo Carta gestiona los productos y menús de la cafetería, permitiendo registrar artículos, controlar precios y disponibilidad, relacionar con inventario y promociones, y facilitar la consulta y actualización del menú por el personal.
+<p>Agrupar los productos en grandes categorías del menú (ejemplo: Hamburguesas, Bebidas, Postres, Baguettes).
 </p>
 
 <h4>Campos</h4>
 <ul>
-  <li><strong>Id_producto:</strong> Identificador único del producto (clave primaria, autoincrementable).</li>
-  <li><strong>Nombre:</strong> Nombre del producto (ej. Café Latte, Pastel de Chocolate).</li>
-  <li><strong>Descripcion:</strong> Descripción del producto (ingredientes, tamaño, etc.).</li>
-  <li><strong>Precio:</strong> Precio del producto.</li>
-  <li><strong>Categoria:</strong> Tipo de producto (Bebida, Postre, Combo, Otros).</li>
-  <li><strong>Disponible:</strong> Estado de disponibilidad (Sí / No).</li>
-  <li><strong>Fecha_agregado:</strong> Fecha en la que se agregó el producto a la carta.</li>
+    <li><strong>id_categoria</strong>: Identificador único (PK).</li>
+    <li><strong>nombre</strong>: Nombre de la categoría (ej. "Bebidas").</li>
+    <li><strong>descripcion</strong>: Breve descripción de la categoría.</li>
 </ul>
 
-<h3>Tabla Ingredientes</h3>
+
+
+
+
+<h3>Tabla Subcategorias</h3>
 <h4>Propósito</h4>
-<p>Guardar las materias primas y su stock actual.
+<p>Dividir cada categoría en subgrupos más específicos.
 </p>
 <h4>Campos</h4>
 <ul>
-    <li><strong>Id_ingrediente</strong>: Identificador único (PK).</li>
-    <li><strong>Nombre</strong>: Nombre del ingrediente (ej. Leche, Pan, Café).</li>
-    <li><strong>Cantidad</strong>:  Existencia actual.</li>
-    <li><strong>Unidad</strong>: Medida (litros, kilos, piezas).</li>
-    <li><strong>Fecha_actualizacion</strong>: Última vez que se actualizó el stock.</li>
+    <li><strong>id_subcategoria</strong>: Identificador único (PK).</li>
+    <li><strong>id_categoria</strong>: Llave foránea que indica a qué categoría pertenece.</li>
+    <li><strong>nombre</strong>: Nombre de la subcategoría (ej. "Hamburguesas Clásicas").</li>
+    <li><strong>descripcion</strong>: Breve detalle de la subcategoría.</li>
 </ul>
 
-<h3>Tabla Receta</h3>
+
+
+
+
+<h3>Tabla Productos</h3>
 <h4>Propósito</h4>
-<p>Conectar un producto de la carta con los ingredientes que requiere.
+<p>Almacenar la información de cada producto del menú (platillos, bebidas, postres, etc.).
 </p>
 <h4>Campos</h4>
 <ul>
-    <li><strong>Id_receta</strong>: Identificador único (PK).</li>
-    <li><strong>Id_producto</strong>: Producto asociado (FK → Carta).</li>
-    <li><strong>Id_ingrediente</strong>: Ingrediente asociado (FK → Ingredientes).</li>
-    <li><strong>Cantidad</strong>: Cantidad de ingrediente necesaria por unidad de producto.</li>
-    <li><strong>Es_opcional</strong>: Si puede omitirse (ej. jitomate en hamburguesa).</li>
+    <li><strong>id_producto</strong>: Identificador único (PK).</li>
+    <li><strong>id_subcategoria</strong>: Llave foránea que conecta el producto con su subcategoría.</li>
+    <li><strong>nombre</strong>: Nombre del producto.</li>
+    <li><strong>descripcion</strong>: Texto con detalle breve del producto.</li>
+    <li><strong>ingredientes</strong>: Ingredientes principales.</li>
+    <li><strong>precio</strong>: Precio normal del producto.</li>
+    <li><strong>precio_promocion</strong>: Precio con descuento (si aplica).</li>
+    <li><strong>disponible</strong>: BIT → 1 = disponible, 0 = no disponible.</li>
+    <li><strong>tamaño</strong>: Aplica solo para bebidas.</li>
+    <li><strong>sabor</strong>: Aplica en postres/helados.</li>
 </ul>
 
 
-<h3>Tabla Inventario</h3>
-<h4>Propósito</h4>
-<p>Controlar el stock actual de cada ingrediente
-</p>
-<h4>Campos</h4>
-<ul>
-    <li><strong>Id_inventario</strong>: Identificador único (PK).</li>
-    <li><strong>Id_ingrediente</strong>: Ingrediente relacionado (FK → Ingredientes).</li>
-    <li><strong>Cantidad</strong>: Stock disponible.</li>
-    <li><strong>Fecha_actualizacion</strong>: Fecha de último cambio.</li>
-</ul>
 
-<h3>Tabla Ventas</h3>
-<h4>Propósito</h4>
-<p>Registrar las operaciones de venta.
-</p>
-<h4>Campos</h4>
-<ul>
-    <li><strong>Id_venta</strong>: Identificador único (PK).</li>
-    <li><strong>Id_producto</strong>: Producto vendido (FK → Carta).</li>
-    <li><strong>Cantidad</strong>: Número de unidades.</li>
-    <li><strong>Total</strong>: Importe de la venta.</li>
-    <li><strong>Fecha_venta</strong>: Fecha y hora de la venta.</li>
-</ul>
-
-<h3>Tabla MovimientosInentario</h3>
-<h4>Propósito</h4>
-<p>Llevar el historial de entradas y salidas de ingredientes.
-</p>
-<h4>Campos</h4>
-<ul>
-    <li><strong>Id_movimiento</strong>: Identificador único (PK).</li>
-    <li><strong>Id_ingrediente</strong>: Ingrediente relacionado (FK → Ingredientes).</li>
-    <li><strong>Tipo</strong>: Entrada (compra) o Salida (venta/merma).</li>
-    <li><strong>Cantidad</strong>: Cantidad del movimiento.</li>
-    <li><strong>Fecha</strong>: Fecha y hora del movimiento.</li>
-    <li><strong>Referencia</strong>: Descripción del motivo (ej. “Venta #12”).</li>
-</ul>
 
 
 <h2>Normalización de la Base de Datos</h2>
 <ul>
-    <li><strong>Primera Forma Normal (1FN)</strong>
-        <ul>
-            <li>Cada campo almacena un solo valor (nada de listas o datos repetidos en una celda).</li>
-            <li>Ejemplo: En Ingredientes cada fila es un ingrediente único con su cantidad.</li>
-            <li>✔ Cumplida.</li>
-        </ul>
-    </li>
-    <li><strong>Segunda Forma Normal (2FN)</strong>
-        <ul>
-            <li>Cada campo depende de la clave primaria de su tabla.</li>
-            <li>Ejemplo: En Receta, el campo Cantidad depende de la combinación Id_producto + Id_ingrediente.</li>
-            <li>✔ Cumplida.</li>
-        </ul>
-    </li>
-    <li><strong>Tercera Forma Normal (3FN)</strong>
-        <ul>
-            <li>Ningún campo depende de otro campo que no sea la clave primaria.</li>
-            <li>Ejemplo: En Carta, el precio depende del producto, no de la categoría.</li>
-            <li>✔ Cumplida.</li>
-        </ul>
-    </li>
+    <li><strong>FN (Primera Forma Normal)</strong></li>
+    <ul>
+        <li>Cada campo almacena un valor atómico (sin listas ni valores repetidos).</li>
+        <li>Ejemplo: ingredientes se manejan como texto, no como múltiples columnas.</li>
+    </ul>
+    
+    <li><strong>2FN (Segunda Forma Normal)</strong></li>
+    <ul>
+        <li>Todas las tablas dependen de su clave primaria.</li>
+        <li>Ejemplo: en Subcategorias, el campo nombre depende de id_subcategoria, no de otra cosa.</li>
+    </ul>
+    
+    <li><strong>3FN (Tercera Forma Normal)</strong></li>
+    <ul>
+        <li>No existen dependencias transitivas.</li>
+        <li>Ejemplo: un producto no guarda el nombre de la categoría directamente, solo el id_subcategoria, y desde ahí se obtiene la categoría → evita duplicar datos.</li>
+    </ul>
 </ul>
 
-
-
-
-
 <h3>Código SQL para crear la tabla</h3>
-<pre>CREATE TABLE Carta (
-    Id_producto INT PRIMARY KEY IDENTITY(1,1),
-    Nombre NVARCHAR(100) NOT NULL,
-    Descripcion NVARCHAR(200) NULL,
-    Precio DECIMAL(10,2) NOT NULL,
-    Categoria NVARCHAR(50) NULL,
-    Disponible BIT NOT NULL DEFAULT 1,
-    Fecha_agregado DATE NOT NULL
+<pre>CREATE TABLE Categorias (
+    id_categoria INT PRIMARY KEY IDENTITY(1,1),
+    nombre NVARCHAR(100) NOT NULL,   -- Hamburguesas, Bebidas, Postres, Baguettes
+    descripcion NVARCHAR(255)
 );
-GO
 
--- Ingredientes (catálogo de insumos, sin stock)
-CREATE TABLE Ingredientes (
-    Id_ingrediente INT PRIMARY KEY IDENTITY(1,1),
-    Nombre NVARCHAR(100) NOT NULL,
-    Unidad NVARCHAR(20) NOT NULL,
-    Fecha_agregado DATE NOT NULL
+-- TABLA DE SUBCATEGORÍAS
+CREATE TABLE Subcategorias (
+    id_subcategoria INT PRIMARY KEY IDENTITY(1,1),
+    id_categoria INT NOT NULL,
+    nombre NVARCHAR(100) NOT NULL,  -- Ejemplo: Hamburguesas Clásicas, Refrescos, Helados
+    descripcion NVARCHAR(255),
+    FOREIGN KEY (id_categoria) REFERENCES Categorias(id_categoria)
 );
-GO
 
--- Inventario (stock real por ingrediente)
-CREATE TABLE Inventario (
-    Id_inventario INT PRIMARY KEY IDENTITY(1,1),
-    Id_ingrediente INT NOT NULL,
-    Cantidad DECIMAL(10,2) NOT NULL,          -- Stock actual
-    Fecha_actualizacion DATE NOT NULL,
-    FOREIGN KEY (Id_ingrediente) REFERENCES Ingredientes(Id_ingrediente)
+-- TABLA DE PRODUCTOS
+CREATE TABLE Productos (
+    id_producto INT PRIMARY KEY IDENTITY(1,1),
+    id_subcategoria INT NOT NULL,
+    nombre NVARCHAR(150) NOT NULL,         -- Nombre del platillo
+    descripcion NVARCHAR(500),             -- Descripción corta
+    ingredientes NVARCHAR(500) NULL,       -- Ingredientes (NULL en bebidas)
+    precio DECIMAL(10,2) NOT NULL,         -- Precio base
+    precio_promocion DECIMAL(10,2) NULL,   -- Precio con descuento
+    disponible BIT DEFAULT 1,              -- TRUE = disponible / FALSE = no disponible
+    tamanio NVARCHAR(50) NULL,             -- Solo aplica en bebidas
+    sabor NVARCHAR(50) NULL,               -- Solo aplica en postres/helados
+    FOREIGN KEY (id_subcategoria) REFERENCES Subcategorias(id_subcategoria)
 );
-GO
-
--- Receta (producto ↔ ingrediente, cantidad por unidad, opcionalidad)
-CREATE TABLE Receta (
-    Id_receta INT PRIMARY KEY IDENTITY(1,1),
-    Id_producto INT NOT NULL,
-    Id_ingrediente INT NOT NULL,
-    Cantidad DECIMAL(10,4) NOT NULL, -- cantidad por unidad de producto
-    Es_opcional BIT NOT NULL DEFAULT 0,
-    FOREIGN KEY (Id_producto) REFERENCES Carta(Id_producto),
-    FOREIGN KEY (Id_ingrediente) REFERENCES Ingredientes(Id_ingrediente)
-);
-GO
-
--- Ventas (registro de ventas)
-CREATE TABLE Ventas (
-    Id_venta INT PRIMARY KEY IDENTITY(1,1),
-    Id_producto INT NOT NULL,
-    Cantidad INT NOT NULL,
-    Total DECIMAL(10,2) NOT NULL,
-    Fecha_venta DATETIME NOT NULL DEFAULT GETDATE(),
-    FOREIGN KEY (Id_producto) REFERENCES Carta(Id_producto)
-);
-GO
-
--- MovimientosInventario (historial de entradas/salidas por registro de inventario)
-CREATE TABLE MovimientosInventario (
-    Id_movimiento INT PRIMARY KEY IDENTITY(1,1),
-    Id_inventario INT NOT NULL,
-    Tipo NVARCHAR(10) CHECK (Tipo IN ('Entrada','Salida')),
-    Cantidad DECIMAL(10,4) NOT NULL,
-    Fecha DATETIME NOT NULL DEFAULT GETDATE(),
-    Referencia NVARCHAR(200) NULL,
-    FOREIGN KEY (Id_inventario) REFERENCES Inventario(Id_inventario)
-);
-GO
 </pre>
 
 <h3>Código SQL para agregar registros</h3>
-<pre>INSERT INTO Carta (Nombre, Descripcion, Precio, Categoria, Disponible, Fecha_agregado)
+<pre>INSERT INTO Categorias (nombre, descripcion) VALUES
+('Hamburguesas', 'Variedad de hamburguesas clásicas y especiales'),
+('Bebidas', 'Refrescos, jugos y bebidas frías'),
+('Postres', 'Pasteles, helados y más'),
+('Baguettes', 'Recetas frescas y calientes');
+
+-- Subcategorías
+INSERT INTO Subcategorias (id_categoria, nombre, descripcion) VALUES
+(1, 'Hamburguesas Clásicas', 'Opciones tradicionales'),
+(1, 'Hamburguesas Especiales', 'Con ingredientes premium'),
+(2, 'Refrescos', 'Gaseosas en diferentes tamaños'),
+(2, 'Jugos Naturales', 'Jugos frescos y saludables'),
+(3, 'Pasteles', 'Rebanadas de pastel'),
+(3, 'Helados', 'Helados de distintos sabores'),
+(4, 'Baguettes Calientes', 'Recetas horneadas'),
+(4, 'Baguettes Frías', 'Recetas frescas');
+
+-- Productos
+INSERT INTO Productos (id_subcategoria, nombre, descripcion, ingredientes, precio, precio_promocion, disponible, tamanio, sabor)
 VALUES
-('Café Latte', 'Café con leche espumosa', 45.00, 'Bebida', 1, GETDATE()),
-('Hamburguesa Clásica', 'Carne, queso, jitomate, lechuga y pan artesanal', 85.00, 'Comida', 1, GETDATE()),
-('Brownie', 'Pastel de chocolate con nuez', 40.00, 'Postre', 1, GETDATE());
-GO
+-- Hamburguesas Clásicas
+(1, 'Hamburguesa Sencilla', 'Carne de res con lechuga y jitomate', 'Carne de res, lechuga, jitomate, pan', 80, NULL, 1, NULL, NULL),
+(1, 'Hamburguesa Doble', 'Doble carne y queso', 'Carne de res, queso, lechuga, jitomate, pan', 120, 100, 1, NULL, NULL),
 
--- Ingredientes
-INSERT INTO Ingredientes (Nombre, Cantidad, Unidad, Fecha_actualizacion)
-VALUES
-('Café', 10.0, 'kg', GETDATE()),
-('Leche', 20.0, 'lt', GETDATE()),
-('Pan', 30.0, 'pz', GETDATE()),
-('Carne', 15.0, 'kg', GETDATE()),
-('Queso', 10.0, 'kg', GETDATE()),
-('Jitomate', 25.0, 'pz', GETDATE()),
-('Lechuga', 12.0, 'pz', GETDATE()),
-('Chocolate', 5.0, 'kg', GETDATE()),
-('Nuez', 2.0, 'kg', GETDATE());
-GO
+-- Hamburguesas Especiales
+(2, 'Hamburguesa BBQ', 'Con salsa barbacoa y tocino', 'Carne de res, tocino, queso cheddar, salsa BBQ', 150, NULL, 1, NULL, NULL),
+(2, 'Hamburguesa Vegana', 'Elaborada con garbanzos y vegetales', 'Garbanzo, lechuga, jitomate, pan integral', 130, 110, 1, NULL, NULL),
 
--- Receta
-INSERT INTO Receta (Id_producto, Id_ingrediente, Cantidad, Es_opcional)
-VALUES
--- Café Latte
-(1, 1, 0.05, 0),  -- Café
-(1, 2, 0.20, 0),  -- Leche
+-- Refrescos
+(3, 'Coca-Cola', 'Refresco de cola', NULL, 40, NULL, 1, '500ml', NULL),
+(3, 'Sprite', 'Refresco sabor limón', NULL, 35, NULL, 1, '355ml', NULL),
 
--- Hamburguesa Clásica
-(2, 3, 1.00, 0),  -- Pan
-(2, 4, 0.15, 0),  -- Carne
-(2, 5, 0.05, 0),  -- Queso
-(2, 6, 1.00, 1),  -- Jitomate (opcional)
-(2, 7, 1.00, 1),  -- Lechuga (opcional)
+-- Jugos Naturales
+(4, 'Jugo de Naranja', 'Natural y recién exprimido', NULL, 45, NULL, 1, '400ml', NULL),
+(4, 'Jugo Verde', 'Con espinaca, piña y pepino', NULL, 50, 45, 1, '400ml', NULL),
 
--- Brownie
-(3, 8, 0.10, 0),  -- Chocolate
-(3, 9, 0.02, 0);  -- Nuez
-GO
+-- Postres
+(5, 'Pastel de Chocolate', 'Rebanada de pastel esponjoso', 'Chocolate, harina, huevo, leche', 60, NULL, 1, NULL, NULL),
+(6, 'Helado de Vainilla', 'Clásico helado cremoso', NULL, 30, NULL, 0, NULL, 'Vainilla'),
+(6, 'Helado de Fresa', 'Helado artesanal de fresa', NULL, 35, NULL, 1, NULL, 'Fresa'),
 
--- Inventario
-INSERT INTO Inventario (Id_ingrediente, Cantidad, Fecha_actualizacion)
-VALUES
-(1, 10.0, GETDATE()),  -- Café
-(2, 20.0, GETDATE()),  -- Leche
-(3, 30.0, GETDATE()),  -- Pan
-(4, 15.0, GETDATE()),  -- Carne
-(5, 10.0, GETDATE()),  -- Queso
-(6, 25.0, GETDATE()),  -- Jitomate
-(7, 12.0, GETDATE()),  -- Lechuga
-(8, 5.0, GETDATE()),   -- Chocolate
-(9, 2.0, GETDATE());   -- Nuez
-GO
-
--- Ventas
-INSERT INTO Ventas (Id_producto, Cantidad, Total, Fecha_venta)
-VALUES
-(1, 2, 90.00, GETDATE()),   -- 2 Café Latte
-(2, 1, 85.00, GETDATE()),   -- 1 Hamburguesa Clásica
-(3, 3, 120.00, GETDATE());  -- 3 Brownies
-GO
-
--- MovimientosInventario
-INSERT INTO MovimientosInventario (Id_ingrediente, Tipo, Cantidad, Fecha, Referencia)
-VALUES
--- Por venta de 2 Café Latte
-(1, 'Salida', 0.10, GETDATE(), 'Venta Id=1'), -- Café
-(2, 'Salida', 0.40, GETDATE(), 'Venta Id=1'), -- Leche
-
--- Por venta de 1 Hamburguesa
-(3, 'Salida', 1.00, GETDATE(), 'Venta Id=2'), -- Pan
-(4, 'Salida', 0.15, GETDATE(), 'Venta Id=2'), -- Carne
-(5, 'Salida', 0.05, GETDATE(), 'Venta Id=2'), -- Queso
-(6, 'Salida', 1.00, GETDATE(), 'Venta Id=2'), -- Jitomate
-(7, 'Salida', 1.00, GETDATE(), 'Venta Id=2'), -- Lechuga
-
--- Por venta de 3 Brownies
-(8, 'Salida', 0.30, GETDATE(), 'Venta Id=3'), -- Chocolate
-(9, 'Salida', 0.06, GETDATE(), 'Venta Id=3'); -- Nuez
-GO
+-- Baguettes
+(7, 'Baguette de Jamón y Queso', 'Pan baguette con jamón y queso gratinado', 'Jamón, queso, pan baguette', 90, NULL, 1, NULL, NULL),
+(8, 'Baguette de Pollo', 'Pollo desmenuzado con aderezo', 'Pollo, mayonesa, lechuga, pan baguette', 95, 85, 1, NULL, NULL);
 </pre>
 
     <a href="index.html">⬅ Volver al menú principal</a>
