@@ -154,49 +154,74 @@
 
   <script>
     let posts = [];
-    let estadisticas = [];
-    let idCounter = 1;
+  let estadisticas = [];
+  let idCounter = 1;
 
-    // Registrar post
-    document.getElementById("formPost").addEventListener("submit", e => {
-      e.preventDefault();
-      const plataforma = document.getElementById("plataforma").value;
-      const titulo = document.getElementById("titulo").value;
-      const contenido = document.getElementById("contenido").value;
-      const fecha = document.getElementById("fecha").value;
+  // Registrar post
+  document.getElementById("formPost").addEventListener("submit", e => {
+    e.preventDefault();
+    const plataforma = document.getElementById("plataforma").value;
+    const titulo = document.getElementById("titulo").value;
+    const contenido = document.getElementById("contenido").value;
+    const fecha = document.getElementById("fecha").value;
 
-      posts.push({ id: idCounter, plataforma, titulo, contenido, fecha });
-      estadisticas.push({ id: idCounter, likes: 0, vistas: 0, compartidos: 0 });
-      idCounter++;
+    posts.push({ id: idCounter, plataforma, titulo, contenido, fecha });
+    estadisticas.push({ id: idCounter, likes: 0, vistas: 0, compartidos: 0 });
+    idCounter++;
 
-      mostrar();
-      e.target.reset();
+    mostrar();
+    e.target.reset();
+  });
+
+  // Registrar estadísticas
+  document.getElementById("formEstadisticas").addEventListener("submit", e => {
+    e.preventDefault();
+    const id = parseInt(document.getElementById("idPost").value);
+    const likes = parseInt(document.getElementById("likes").value) || 0;
+    const vistas = parseInt(document.getElementById("vistas").value) || 0;
+    const compartidos = parseInt(document.getElementById("compartidos").value) || 0;
+
+    const est = estadisticas.find(item => item.id === id);
+    if (est) {
+      // 👇 Aquí el cambio importante (se actualiza en lugar de sumar)
+      est.likes = likes;
+      est.vistas = vistas;
+      est.compartidos = compartidos;
+    }
+    mostrar();
+    e.target.reset();
+  });
+
+  // Mostrar tabla
+  function mostrar() {
+    const tbody = document.querySelector("#tablaMarketing tbody");
+    tbody.innerHTML = "";
+    posts.forEach(p => {
+      const est = estadisticas.find(item => item.id === p.id);
+      tbody.innerHTML += `
+        <tr>
+          <td>${p.id}</td>
+          <td>${p.plataforma}</td>
+          <td>${p.titulo}</td>
+          <td>${p.fecha}</td>
+          <td>${est.likes}</td>
+          <td>${est.vistas}</td>
+          <td>${est.compartidos}</td>
+        </tr>`;
     });
+  }
 
-    // Registrar estadísticas
-    document.getElementById("formEstadisticas").addEventListener("submit", e => {
-      e.preventDefault();
-      const id = parseInt(document.getElementById("idPost").value);
-      const likes = parseInt(document.getElementById("likes").value) || 0;
-      const vistas = parseInt(document.getElementById("vistas").value) || 0;
-      const compartidos = parseInt(document.getElementById("compartidos").value) || 0;
+  // Filtrar
+  function filtrar() {
+    const plataforma = document.getElementById("filtroPlataforma").value;
+    const fecha = document.getElementById("filtroFecha").value;
+    const tbody = document.querySelector("#tablaMarketing tbody");
+    tbody.innerHTML = "";
 
-      const est = estadisticas.find(item => item.id === id);
-      if (est) {
-        est.likes += likes;
-        est.vistas += vistas;
-        est.compartidos += compartidos;
-      }
-      mostrar();
-      e.target.reset();
-    });
-
-    // Mostrar tabla
-    function mostrar() {
-      const tbody = document.querySelector("#tablaMarketing tbody");
-      tbody.innerHTML = "";
-      posts.forEach(p => {
-        const est = estadisticas.find(item => item.id === p.id);
+    posts.forEach(p => {
+      const est = estadisticas.find(item => item.id === p.id);
+      if ((plataforma === "Todas" || p.plataforma === plataforma) &&
+          (!fecha || p.fecha === fecha)) {
         tbody.innerHTML += `
           <tr>
             <td>${p.id}</td>
@@ -207,33 +232,9 @@
             <td>${est.vistas}</td>
             <td>${est.compartidos}</td>
           </tr>`;
-      });
-    }
-
-    // Filtrar
-    function filtrar() {
-      const plataforma = document.getElementById("filtroPlataforma").value;
-      const fecha = document.getElementById("filtroFecha").value;
-      const tbody = document.querySelector("#tablaMarketing tbody");
-      tbody.innerHTML = "";
-
-      posts.forEach(p => {
-        const est = estadisticas.find(item => item.id === p.id);
-        if ((plataforma === "Todas" || p.plataforma === plataforma) &&
-            (!fecha || p.fecha === fecha)) {
-          tbody.innerHTML += `
-            <tr>
-              <td>${p.id}</td>
-              <td>${p.plataforma}</td>
-              <td>${p.titulo}</td>
-              <td>${p.fecha}</td>
-              <td>${est.likes}</td>
-              <td>${est.vistas}</td>
-              <td>${est.compartidos}</td>
-            </tr>`;
-        }
-      });
-    }
+      }
+    });
+  }
   </script>
 </body>
 </html>
