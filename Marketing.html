@@ -143,69 +143,164 @@ nav ul li a {
     <h2>Requerimientos por usuario</h2>
     <h3>Requerimientos del propietario</h3>
     <ul>
-      <li><strong>Crear Promociones:</strong> Definir nuevas campañas de marketing.</li>
-      <li><strong>Acceder a Campañas Existentes:</strong> Consultar información sobre promociones activas.</li>
-      <li><strong>Modificar Detalles de Campañas:</strong> Actualizar nombres, objetivos y medios de promoción.</li>
-      <li><strong>Gestionar Fechas:</strong> Establecer y modificar fechas de inicio y fin de las promociones.</li>
-      <li><strong>Eliminar Campañas Vencidas:</strong> Retirar promociones que ya no están en vigencia.</li>
-    </ul>
+    <li>Registrar estrategias (plataformas como Facebook, Instagram, TikTok, etc.).</li>
+    <li>Registrar publicaciones con su título, contenido y fecha.</li>
+    <li>Registrar estadísticas de cada post (likes, vistas y compartidos).</li>
+    <li>Visualizar los datos en una tabla con la información de posts y estadísticas.</li>
+    <li>Filtrar la información por plataforma o por fecha.</li>
+    <li>Mantener la información disponible para consultas posteriores.</li>
+</ul>
 
     <h2>Diseño de la base de datos del módulo</h2>
-    <img src="TablaMarketing.png" alt="Tabla Marketing">
+    <img src="TablaM.png" alt="Tabla Marketing">
 
     <h2>Descripción de Pertinencia de la Arquitectura de la Base de Datos</h2>
-    <h3>Tabla Marketing</h3>
+    <h3>Tabla Estrategia</h3>
     <h4>Propósito</h4>
     <p>
-      La tabla Marketing tiene como objetivo gestionar las campañas de marketing de la cafetería. Permite crear, consultar, actualizar y eliminar campañas para medir su impacto en clientes y ventas.
+      Registrar las plataformas o estrategias de marketing (Facebook, Instagram, TikTok, etc.) donde se publican campañas o posts.
     </p>
 
     <h4>Campos</h4>
     <ul>
-      <li><strong>Id_marketing:</strong> Identificador único de la campaña (clave primaria, autoincrementable).</li>
-      <li><strong>Nombre:</strong> Nombre de la campaña (ejemplo: Promo 2x1 Café).</li>
-      <li><strong>Objetivo:</strong> Propósito de la campaña (ejemplo: Aumentar clientes nuevos).</li>
-      <li><strong>Medio:</strong> Canal de difusión (ejemplo: Facebook, radio, volanteo, etc.).</li>
-      <li><strong>Fecha_inicio:</strong> Fecha en que inicia la campaña.</li>
-      <li><strong>Fecha_fin:</strong> Fecha en que finaliza la campaña (puede estar vacía si sigue activa).</li>
-    </ul>
+    <li><strong>Id_estrategia</strong> (INT, PK, AUTO_INCREMENT): Identificador único de cada estrategia/plataforma.</li>
+    <li><strong>Nombre</strong> (NVARCHAR(100), NOT NULL): Nombre de la estrategia o red social (ej. "Facebook Ads").</li>
+    <li><strong>Descripcion</strong> (NVARCHAR(200), NULL): Descripción breve de la estrategia (ej. "Campañas pagadas en Facebook").</li>
+</ul>
+
+
+<h3>Tabla Post</h3>
+    <h4>Propósito</h4>
+    <p>
+      Almacenar los posts o campañas publicadas en una estrategia específica.
+    </p>
+
+    <h4>Campos</h4>
+  <ul>
+    <li><strong>Id_post</strong> (INT, PK, AUTO_INCREMENT): Identificador único del post.</li>
+    <li><strong>Id_estrategia</strong> (INT, FK): Relación con la tabla Estrategia, indica en qué plataforma se publicó.</li>
+    <li><strong>Titulo</strong> (NVARCHAR(150), NOT NULL): Título breve del post.</li>
+    <li><strong>Contenido</strong> (NVARCHAR(500), NULL): Texto descriptivo o detalle del post.</li>
+    <li><strong>Fecha_publicacion</strong> (DATE, NOT NULL): Fecha en que se publicó el post.</li>
+</ul>
+
+
+<h3>Tabla EstadisticasPost</h3>
+    <h4>Propósito</h4>
+    <p>
+      Registrar el rendimiento de los posts a lo largo del tiempo (likes, vistas, compartidos).
+    </p>
+
+    <h4>Campos</h4>
+ <ul>
+    <li><strong>Id_estadistica</strong> (INT, PK, AUTO_INCREMENT): Identificador único de cada registro de estadísticas.</li>
+    <li><strong>Id_post</strong> (INT, FK): Relación con la tabla Post, indica a qué publicación corresponden las métricas.</li>
+    <li><strong>Likes</strong> (INT, DEFAULT 0): Número de "me gusta" obtenidos.</li>
+    <li><strong>Vistas</strong> (INT, DEFAULT 0): Número de visualizaciones.</li>
+    <li><strong>Compartidos</strong> (INT, DEFAULT 0): Número de veces que fue compartido.</li>
+    <li><strong>Fecha_registro</strong> (DATE, DEFAULT GETDATE()): Fecha en que se registraron estas estadísticas.</li>
+</ul>
+
 
     <h2>Normalización de la Base de Datos</h2>
     <ul>
-      <li><strong>1FN:</strong> Cada campo almacena un único valor; la tabla Marketing cumple.</li>
-      <li><strong>2FN:</strong> Todos los campos dependen de la clave primaria (Id_marketing).</li>
-      <li><strong>3FN:</strong> Ningún campo depende de otro campo que no sea la clave primaria.</li>
+    <li><strong>1FN (Primera Forma Normal)</strong></li>
+    <ul>
+        <li>No hay atributos multivaluados ni repetidos.</li>
+        <li>Cada campo almacena un valor atómico.</li>
     </ul>
+    
+    <li><strong>2FN (Segunda Forma Normal)</strong></li>
+    <ul>
+        <li>Todas las tablas tienen clave primaria.</li>
+        <li>Los campos dependen únicamente de la clave primaria:</li>
+        <ul>
+            <li>En Estrategia, los campos dependen de Id_estrategia.</li>
+            <li>En Post, los campos dependen de Id_post.</li>
+            <li>En EstadisticasPost, los campos dependen de Id_estadistica.</li>
+        </ul>
+    </ul>
+    
+    <li><strong>3FN (Tercera Forma Normal)</strong></li>
+    <ul>
+        <li>No existen dependencias transitivas.</li>
+        <li>Ejemplo: los Likes, Vistas y Compartidos dependen solo de la estadística, no de la estrategia.</li>
+        <li>Los nombres de plataformas están en su propia tabla (Estrategia), evitando redundancia.</li>
+    </ul>
+</ul>
+
 
     <h3>Código SQL para crear la tabla</h3>
     <pre>
--- Crear la base de datos
-CREATE DATABASE MonkyCafeDB;
-GO
+CREATE DATABASE ModuloMarketing;
+go
 
--- Usar la base de datos
-USE MonkyCafeDB;
-GO
 
--- Crear tabla Marketing
-CREATE TABLE Marketing (
-    Id_marketing INT PRIMARY KEY IDENTITY(1,1),
-    Nombre NVARCHAR(100) NOT NULL,
-    Objetivo NVARCHAR(200),
-    Medio NVARCHAR(100),
-    Fecha_inicio DATE NOT NULL,
-    Fecha_fin DATE
+CREATE TABLE Estrategia (
+    Id_estrategia INT PRIMARY KEY IDENTITY(1,1),
+    Nombre NVARCHAR(100) NOT NULL,  -- Ej. Facebook, Instagram
+    Descripcion NVARCHAR(200) NULL
 );
-GO
+
+
+CREATE TABLE Post (
+    Id_post INT PRIMARY KEY IDENTITY(1,1),
+    Id_estrategia INT NOT NULL,
+    Titulo NVARCHAR(150) NOT NULL,
+    Contenido NVARCHAR(500) NULL,
+    Fecha_publicacion DATE NOT NULL,
+    FOREIGN KEY (Id_estrategia) REFERENCES Estrategia(Id_estrategia)
+);
+
+
+CREATE TABLE EstadisticasPost (
+    Id_estadistica INT PRIMARY KEY IDENTITY(1,1),
+    Id_post INT NOT NULL,
+    Likes INT DEFAULT 0,
+    Vistas INT DEFAULT 0,
+    Compartidos INT DEFAULT 0,
+    Fecha_registro DATE NOT NULL DEFAULT GETDATE(),
+    FOREIGN KEY (Id_post) REFERENCES Post(Id_post)
+);
+
     </pre>
 
     <h3>Código SQL para agregar registros</h3>
     <pre>
-INSERT INTO Marketing (Nombre, Objetivo, Medio, Fecha_inicio, Fecha_fin)
+INSERT INTO Estrategia (Nombre, Descripcion)
 VALUES 
-('Promo Café 2x1', 'Aumentar ventas en mañanas', 'Redes Sociales', '2025-09-01', '2025-09-30'),
-('Descuento Estudiantes', 'Atraer público joven', 'Universidades', '2025-09-05', '2025-12-20');
-GO
+('Facebook', 'Campañas en Facebook Ads'),
+('Instagram', 'Campañas en Instagram Reels'),
+('Twitter', 'Campañas en Twitter'),
+('TikTok', 'Campañas en TikTok'),
+('LinkedIn', 'Promoción corporativa');
+
+-- =========================================
+-- Insertar posts
+-- =========================================
+INSERT INTO Post (Id_estrategia, Titulo, Contenido, Fecha_publicacion)
+VALUES 
+(1, 'Promo 2x1 en Café', 'Oferta especial solo por hoy', '2025-09-01'),
+(1, 'Descuento en combos', 'Combos seleccionados a mitad de precio', '2025-09-10'),
+(2, 'Nuevo pastel Red Velvet', 'Disponible toda la semana', '2025-09-05'),
+(2, 'Promoción helados', 'Helados artesanales con 10% de descuento', '2025-09-08'),
+(3, 'Concurso Twitter', 'Gana cupones compartiendo nuestro post', '2025-09-12'),
+(4, 'Video viral TikTok', 'Receta del café más popular', '2025-09-15'),
+(5, 'LinkedIn corporativo', 'Promoción para empresas y oficinas', '2025-09-20');
+
+-- =========================================
+-- Insertar estadísticas de post
+-- =========================================
+INSERT INTO EstadisticasPost (Id_post, Likes, Vistas, Compartidos, Fecha_registro)
+VALUES 
+(1, 120, 1500, 30, '2025-09-02'),
+(1, 200, 2200, 50, '2025-09-03'),
+(2, 300, 4000, 80, '2025-09-11'),
+(3, 90, 1000, 15, '2025-09-06'),
+(4, 150, 1800, 25, '2025-09-09'),
+(5, 50, 800, 10, '2025-09-13'),
+(6, 500, 10000, 200, '2025-09-16'),
+(7, 70, 1200, 20, '2025-09-21');
     </pre>
 
     <a href="index.html">⬅ Volver al menú principal</a>

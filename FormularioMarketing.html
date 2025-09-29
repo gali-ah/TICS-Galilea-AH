@@ -65,6 +65,12 @@
       background: #ff99cc;
       color: white;
     }
+    .volver {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -124,7 +130,7 @@
     <label>Fecha</label>
     <input type="date" id="filtroFecha">
 
-    <button onclick="filtrar()">Aplicar Filtros</button>
+    <button type="button" onclick="filtrar()">Aplicar Filtros</button>
   </div>
 
   <!-- Tabla -->
@@ -142,6 +148,9 @@
     </thead>
     <tbody></tbody>
   </table>
+
+  <!-- Link de regreso -->
+  <a href="Marketing.html" class="volver">⬅ Volver a Marketing</a>
 
   <script>
     let posts = [];
@@ -172,7 +181,7 @@
       const vistas = parseInt(document.getElementById("vistas").value) || 0;
       const compartidos = parseInt(document.getElementById("compartidos").value) || 0;
 
-      const est = estadisticas.find(e => e.id === id);
+      const est = estadisticas.find(item => item.id === id);
       if (est) {
         est.likes += likes;
         est.vistas += vistas;
@@ -187,7 +196,7 @@
       const tbody = document.querySelector("#tablaMarketing tbody");
       tbody.innerHTML = "";
       posts.forEach(p => {
-        const est = estadisticas.find(e => e.id === p.id);
+        const est = estadisticas.find(item => item.id === p.id);
         tbody.innerHTML += `
           <tr>
             <td>${p.id}</td>
@@ -209,7 +218,7 @@
       tbody.innerHTML = "";
 
       posts.forEach(p => {
-        const est = estadisticas.find(e => e.id === p.id);
+        const est = estadisticas.find(item => item.id === p.id);
         if ((plataforma === "Todas" || p.plataforma === plataforma) &&
             (!fecha || p.fecha === fecha)) {
           tbody.innerHTML += `
@@ -225,7 +234,6 @@
         }
       });
     }
-    <a href="Marketing.html">Volver a Marketing</a>
   </script>
 </body>
 </html>
